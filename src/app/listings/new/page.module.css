@@ -1,0 +1,89 @@
+.page {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0 auto;
+  max-width: 820px;
+  padding: 2rem 1rem 4rem;
+}
+
+.header {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.header a,
+.form button {
+  background: var(--foreground);
+  border: 0;
+  border-radius: 8px;
+  color: white;
+  display: inline-flex;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 0.65rem 0.8rem;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.form {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.form label {
+  color: var(--muted);
+  display: grid;
+  font-weight: 700;
+  gap: 0.35rem;
+}
+
+.form input,
+.form select,
+.form textarea {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  min-height: 42px;
+  padding: 0.7rem;
+}
+
+.twoCol {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+.note {
+  background: var(--soft);
+  border-radius: 8px;
+  line-height: 1.55;
+  padding: 1rem;
+}
+
+@media (max-width: 720px) {
+  .header,
+  .twoCol {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .header h1 {
+    font-size: 2.3rem;
+  }
+}

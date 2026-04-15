@@ -1,0 +1,79 @@
+.page {
+  display: grid;
+  gap: 1rem;
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 2rem 1rem 4rem;
+}
+
+.header {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.header a,
+.card button {
+  background: var(--foreground);
+  border: 0;
+  border-radius: 8px;
+  color: white;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 0.65rem 0.8rem;
+}
+
+.eyebrow,
+.meta {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.subtle {
+  color: var(--muted);
+  line-height: 1.55;
+  margin-top: 0.5rem;
+}
+
+.list {
+  display: grid;
+  gap: 1rem;
+}
+
+.card,
+.notice {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.7rem;
+  padding: 1rem;
+}
+
+.notice {
+  background: var(--soft);
+}
+
+.card p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+@media (max-width: 720px) {
+  .header {
+    display: grid;
+  }
+
+  .header h1 {
+    font-size: 2.3rem;
+  }
+}

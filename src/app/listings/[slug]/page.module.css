@@ -1,0 +1,146 @@
+.page {
+  display: grid;
+  gap: 1rem;
+  margin: 0 auto;
+  max-width: 840px;
+  padding: 2rem 1rem 4rem;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.nav a,
+.form button {
+  background: var(--foreground);
+  border: 0;
+  border-radius: 8px;
+  color: white;
+  display: inline-flex;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 0.65rem 0.8rem;
+}
+
+.card,
+.traderCard,
+.form,
+.notice {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+}
+
+.gallery {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gallery figure {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.gallery img {
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.gallery figcaption {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.notice {
+  background: var(--soft);
+}
+
+.traderHeader {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.avatar {
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  object-fit: cover;
+  width: 76px;
+}
+
+.avatarFallback {
+  align-items: center;
+  aspect-ratio: 1;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  font-size: 1.7rem;
+  font-weight: 900;
+  place-items: center;
+  width: 76px;
+}
+
+.eyebrow,
+.meta {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.card h1 {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.card p,
+.traderCard p,
+.notice,
+.form label {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.placeholder {
+  background: var(--soft);
+  border-radius: 8px;
+  padding: 0.6rem;
+}
+
+.form label {
+  display: grid;
+  font-weight: 700;
+  gap: 0.35rem;
+}
+
+.form input,
+.form select,
+.form textarea {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  min-height: 42px;
+  padding: 0.7rem;
+}
+
+@media (max-width: 720px) {
+  .card h1 {
+    font-size: 2.3rem;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+}

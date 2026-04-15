@@ -1,0 +1,58 @@
+.page {
+  display: grid;
+  margin: 0 auto;
+  max-width: 760px;
+  padding: 2rem 1rem 4rem;
+}
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.card h1 {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.card p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.actions a {
+  background: var(--foreground);
+  border-radius: 8px;
+  color: white;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 0.65rem 0.8rem;
+}
+
+@media (max-width: 700px) {
+  .card h1 {
+    font-size: 2.3rem;
+  }
+
+  .actions {
+    display: grid;
+  }
+}
