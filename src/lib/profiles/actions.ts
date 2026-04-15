@@ -54,7 +54,10 @@ export async function updateProfileAction(formData: FormData) {
     profession: String(formData.get("profession") ?? "") || undefined,
     allowedRadiusKm: Number(formData.get("allowedRadiusKm") ?? 20),
   });
-  const profilePhoto = getOptionalProfilePhoto(formData);
+ const profilePhoto = getOptionalProfilePhoto(formData);
+
+console.log("PROFILE PHOTO VALUE:", profilePhoto);
+console.log("FORM ENTRIES:", Array.from(formData.entries()));
   const supabase = await createServerSupabaseClient();
   let avatarUrl = String(formData.get("existingAvatarUrl") ?? "") || null;
 

@@ -52,7 +52,7 @@ export function ProfileSetupForm({
       }}
     >
       <input type="hidden" name="existingAvatarUrl" value={profile?.avatar_url ?? ""} />
-
+          <ProfilePhotoField existingAvatarUrl={profile?.avatar_url} />
       <input type="hidden" name="displayName" value={displayName} />
       <input type="hidden" name="username" value={username} />
       <input type="hidden" name="city" value={city} />
@@ -81,7 +81,6 @@ export function ProfileSetupForm({
       {step === 0 && (
         <fieldset className={styles.panel}>
           <legend>Basic Identity</legend>
-          <ProfilePhotoField existingAvatarUrl={profile?.avatar_url} />
           <label>
             Display name
             <input
