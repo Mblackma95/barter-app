@@ -18,9 +18,55 @@ export function ProfileSetupForm({
 }) {
   const [step, setStep] = useState(0);
 
+  const [displayName, setDisplayName] = useState(profile?.display_name ?? "");
+  const [username, setUsername] = useState(profile?.username ?? "");
+  const [city, setCity] = useState(profile?.city ?? "");
+  const [bio, setBio] = useState(profile?.bio ?? "");
+  const [interests, setInterests] = useState(profile?.interests?.join(", ") ?? "");
+  const [skills, setSkills] = useState(profile?.skills?.join(", ") ?? "");
+  const [currentWants, setCurrentWants] = useState(profile?.current_wants?.join(", ") ?? "");
+  const [currentNeeds, setCurrentNeeds] = useState(profile?.current_needs?.join(", ") ?? "");
+  const [allowedRadiusKm, setAllowedRadiusKm] = useState(String(profile?.allowed_radius_km ?? 20));
+  const [profession, setProfession] = useState(profile?.profession ?? "");
+  const [hobbies, setHobbies] = useState(profile?.hobbies?.join(", ") ?? "");
+  const [preferredCategoryIds, setPreferredCategoryIds] = useState<string[]>(
+    profile?.preferred_category_ids ?? [],
+  );
+
+  function goNext() {
+    setStep((value) => Math.min(value + 1, steps.length - 1));
+  }
+
+  function goBack() {
+    setStep((value) => Math.max(value - 1, 0));
+  }
+
   return (
-    <form action={updateProfileAction} className={styles.form}>
+    <form
+      action={updateProfileAction}
+      className={styles.form}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" && step < steps.length - 1) {
+          event.preventDefault();
+        }
+      }}
+    >
       <input type="hidden" name="existingAvatarUrl" value={profile?.avatar_url ?? ""} />
+
+      <input type="hidden" name="displayName" value={displayName} />
+      <input type="hidden" name="username" value={username} />
+      <input type="hidden" name="city" value={city} />
+      <input type="hidden" name="bio" value={bio} />
+      <input type="hidden" name="interests" value={interests} />
+      <input type="hidden" name="skills" value={skills} />
+      <input type="hidden" name="currentWants" value={currentWants} />
+      <input type="hidden" name="currentNeeds" value={currentNeeds} />
+      <input type="hidden" name="allowedRadiusKm" value={allowedRadiusKm} />
+      <input type="hidden" name="profession" value={profession} />
+      <input type="hidden" name="hobbies" value={hobbies} />
+      {preferredCategoryIds.map((id) => (
+        <input key={id} type="hidden" name="preferredCategoryIds" value={id} />
+      ))}
 
       <ol className={styles.steps} aria-label="Profile setup steps">
         {steps.map((label, index) => (
@@ -32,108 +78,159 @@ export function ProfileSetupForm({
         ))}
       </ol>
 
-      <fieldset className={styles.panel} hidden={step !== 0}>
-        <legend>Basic Identity</legend>
-        <ProfilePhotoField existingAvatarUrl={profile?.avatar_url} />
-        <label>
-          Display name
-          <input name="displayName" defaultValue={profile?.display_name ?? ""} required />
-        </label>
-        <label>
-          Username
-          <input name="username" defaultValue={profile?.username ?? ""} minLength={3} />
-        </label>
-        <label>
-          City/town
-          <input name="city" defaultValue={profile?.city ?? ""} required />
-        </label>
-        <label>
-          Short bio
-          <textarea
-            name="bio"
-            rows={4}
-            defaultValue={profile?.bio ?? ""}
-            placeholder="A quick 1-3 sentence intro for nearby traders."
-          />
-        </label>
-      </fieldset>
+      {step === 0 && (
+        <fieldset className={styles.panel}>
+          <legend>Basic Identity</legend>
+          <ProfilePhotoField existingAvatarUrl={profile?.avatar_url} />
+          <label>
+            Display name
+            <input
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              minLength={2}
+              required
+            />
+          </label>
+          <label>
+            Username
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              minLength={3}
+            />
+          </label>
+          <label>
+            City/town
+            <input
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              minLength={2}
+              required
+            />
+          </label>
+          <label>
+            Short bio
+            <textarea
+              rows={4}
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder="A quick 1-3 sentence intro for nearby traders."
+            />
+          </label>
+        </fieldset>
+      )}
 
-      <fieldset className={styles.panel} hidden={step !== 1}>
-        <legend>Interests & Skills</legend>
-        <p>Separate tags with commas. Tags are saved lowercase and deduplicated.</p>
-        <label>
-          Interests
-          <input name="interests" defaultValue={profile?.interests.join(", ") ?? ""} placeholder="gardening, books" />
-        </label>
-        <label>
-          Skills
-          <input name="skills" defaultValue={profile?.skills.join(", ") ?? ""} placeholder="repairs, design" />
-        </label>
-      </fieldset>
+      {step === 1 && (
+        <fieldset className={styles.panel}>
+          <legend>Interests & Skills</legend>
+          <p>Separate tags with commas. Tags are saved lowercase and deduplicated.</p>
+          <label>
+            Interests
+            <input
+              value={interests}
+              onChange={(e) => setInterests(e.target.value)}
+              placeholder="gardening, books"
+            />
+          </label>
+          <label>
+            Skills
+            <input
+              value={skills}
+              onChange={(e) => setSkills(e.target.value)}
+              placeholder="repairs, design"
+            />
+          </label>
+        </fieldset>
+      )}
 
-      <fieldset className={styles.panel} hidden={step !== 2}>
-        <legend>What I&apos;m Looking For</legend>
-        <p>Add what would make barter useful right now.</p>
-        <label>
-          Current wants
-          <input
-            name="currentWants"
-            defaultValue={profile?.current_wants.join(", ") ?? ""}
-            placeholder="kids clothes, craft supplies"
-          />
-        </label>
-        <label>
-          Current needs
-          <input
-            name="currentNeeds"
-            defaultValue={profile?.current_needs.join(", ") ?? ""}
-            placeholder="bike tune-up, tutoring"
-          />
-        </label>
-      </fieldset>
+      {step === 2 && (
+        <fieldset className={styles.panel}>
+          <legend>What I&apos;m Looking For</legend>
+          <p>Add what would make barter useful right now.</p>
+          <label>
+            Current wants
+            <input
+              value={currentWants}
+              onChange={(e) => setCurrentWants(e.target.value)}
+              placeholder="kids clothes, craft supplies"
+            />
+          </label>
+          <label>
+            Current needs
+            <input
+              value={currentNeeds}
+              onChange={(e) => setCurrentNeeds(e.target.value)}
+              placeholder="bike tune-up, tutoring"
+            />
+          </label>
+        </fieldset>
+      )}
 
-      <fieldset className={styles.panel} hidden={step !== 3}>
-        <legend>Trade Preferences</legend>
-        <label>
-          Trade radius: 1-50 km
-          <input
-            name="allowedRadiusKm"
-            type="range"
-            min={1}
-            max={50}
-            defaultValue={profile?.allowed_radius_km ?? 20}
-          />
-        </label>
-        <label>
-          Optional preferred categories
-          <select name="preferredCategoryIds" multiple defaultValue={profile?.preferred_category_ids ?? []}>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.group_name}: {category.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Work/profession
-          <input name="profession" defaultValue={profile?.profession ?? ""} />
-        </label>
-        <label>
-          Hobbies
-          <input name="hobbies" defaultValue={profile?.hobbies.join(", ") ?? ""} />
-        </label>
-      </fieldset>
+      {step === 3 && (
+        <fieldset className={styles.panel}>
+          <legend>Trade Preferences</legend>
+          <label>
+            Trade radius: 1-50 km
+            <input
+              type="range"
+              min={1}
+              max={50}
+              value={allowedRadiusKm}
+              onChange={(e) => setAllowedRadiusKm(e.target.value)}
+            />
+          </label>
+          <p>{allowedRadiusKm} km</p>
+
+          <label>
+            Optional preferred categories
+            <select
+              multiple
+              value={preferredCategoryIds}
+              onChange={(e) =>
+                setPreferredCategoryIds(
+                  Array.from(e.target.selectedOptions, (option) => option.value),
+                )
+              }
+            >
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.group_name}: {category.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            Work/profession
+            <input
+              value={profession}
+              onChange={(e) => setProfession(e.target.value)}
+            />
+          </label>
+
+          <label>
+            Hobbies
+            <input
+              value={hobbies}
+              onChange={(e) => setHobbies(e.target.value)}
+            />
+          </label>
+        </fieldset>
+      )}
 
       <div className={styles.actions}>
-        <button type="button" onClick={() => setStep((value) => Math.max(value - 1, 0))} disabled={step === 0}>
+        <button type="button" onClick={goBack} disabled={step === 0}>
           Back
         </button>
+
         {step < steps.length - 1 ? (
-          <button type="button" onClick={() => setStep((value) => Math.min(value + 1, steps.length - 1))}>
+          <button key={`next-${step}`} type="button" onClick={goNext}>
             Next
           </button>
         ) : (
-          <button type="submit">Save profile</button>
+          <button key="save-profile" type="submit">
+            Save profile
+          </button>
         )}
       </div>
     </form>

@@ -1,6 +1,6 @@
 import { hasPublicSupabaseEnv } from "@/lib/env";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { getProfileCompletionIssues } from "./completeness";
+import { getProfileSetupIssues, getProfileCompletionIssues } from "./completeness";
 
 export type ProfileRow = {
   id: string;
@@ -43,7 +43,14 @@ const profileSelect = `
 `;
 
 export function getProfileReadiness(profile: ProfileRow | null) {
-  const issues = getProfileCompletionIssues(profile);
+  const issues = getProfileSetupIssues(
+    profile
+      ? {
+          ...profile,
+          trade_radius: profile.allowed_radius_km,
+        }
+      : null,
+  );
 
   return {
     isComplete: issues.length === 0,
@@ -87,10 +94,18 @@ export async function getProfileByUsername(username: string) {
 
 export async function assertProfileReadyForExchange(userId: string) {
   const profile = await getProfileById(userId);
-  const readiness = getProfileReadiness(profile);
 
-  if (!readiness.isComplete) {
-    throw new Error(`Complete your profile before sending proposals or gift requests: ${readiness.issues.join(" ")}`);
+  const issues = getProfileCompletionIssues(
+    profile
+      ? {
+          ...profile,
+          trade_radius: profile.allowed_radius_km,
+        }
+      : null,
+  );
+
+  if (issues.length > 0) {
+    throw new Error(`Complete your profile before sending proposals or gift requests: ${issues.join(" ")}`);
   }
 
   return profile;
