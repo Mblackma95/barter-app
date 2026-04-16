@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getOptionalUser } from "@/lib/auth/session";
+import { addToCircleAction } from "@/lib/circle/actions";
+import { areUsersInCircle } from "@/lib/circle/queries";
 import { getProfileByUsername, getProfileReadiness } from "@/lib/profiles/queries";
 import styles from "./page.module.css";
 
@@ -26,20 +28,18 @@ export default async function PublicProfilePage({
   params: Promise<{ username: string }>;
 }) {
   const { username } = await params;
-  const profile = await getProfileByUsername(username);
+  const [profile, viewer] = await Promise.all([getProfileByUsername(username), getOptionalUser()]);
 
   if (!profile) {
     notFound();
   }
 
   const readiness = getProfileReadiness(profile);
+  const isOwnProfile = viewer?.id === profile.id;
+  const isInCircle = viewer && !isOwnProfile ? await areUsersInCircle(viewer.id, profile.id) : false;
 
   return (
     <main className={styles.page}>
-      <nav className={styles.nav}>
-        <Link href="/browse">Browse</Link>
-      </nav>
-
       <article className={styles.card}>
         <div className={styles.header}>
           {profile.avatar_url ? (
@@ -53,6 +53,17 @@ export default async function PublicProfilePage({
             <p className={styles.meta}>
               @{profile.username} - {profile.city || "City not added"} - {profile.allowed_radius_km} km radius
             </p>
+            {viewer && !isOwnProfile ? (
+              isInCircle ? (
+                <p className={styles.circleState}>In Circle ✓</p>
+              ) : (
+                <form action={addToCircleAction} className={styles.circleForm}>
+                  <input type="hidden" name="circleUserId" value={profile.id} />
+                  <input type="hidden" name="redirectTo" value={`/profiles/${profile.username}`} />
+                  <button type="submit">Add to Circle</button>
+                </form>
+              )
+            ) : null}
           </div>
         </div>
 

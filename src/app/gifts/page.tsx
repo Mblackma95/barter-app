@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { requireUser } from "@/lib/auth/session";
-import { approveGiftRequestAction } from "@/lib/gifts/actions";
+import { approveGiftRequestAction, confirmGiftCompletionAction } from "@/lib/gifts/actions";
 import { listUserGiftRequests } from "@/lib/gifts/queries";
 import styles from "./page.module.css";
 
@@ -24,13 +23,14 @@ export default async function GiftsPage() {
             unread badges will be part of the future notification system.
           </p>
         </div>
-        <Link href="/browse?mode=gift">Browse gifts</Link>
       </header>
 
       <section className={styles.list}>
         {giftRequests.length ? (
           giftRequests.map((request) => {
             const isGiver = request.giver_id === user.id;
+            const userConfirmed = isGiver ? request.giver_confirmed_at : request.requester_confirmed_at;
+            const otherConfirmed = isGiver ? request.requester_confirmed_at : request.giver_confirmed_at;
 
             return (
               <article key={request.id} className={styles.card}>
@@ -43,6 +43,23 @@ export default async function GiftsPage() {
                     <input type="hidden" name="giftRequestId" value={request.id} />
                     <button type="submit">Approve recipient</button>
                   </form>
+                ) : null}
+                {request.status === "approved" ? (
+                  <div className={styles.completion}>
+                    <p>
+                      Completion: {userConfirmed ? "You confirmed" : "You have not confirmed"};{" "}
+                      {otherConfirmed ? "other trader confirmed" : "waiting on other trader"}
+                    </p>
+                    <form action={confirmGiftCompletionAction}>
+                      <input type="hidden" name="giftRequestId" value={request.id} />
+                      <button type="submit" disabled={Boolean(userConfirmed)}>
+                        Confirm gift complete
+                      </button>
+                    </form>
+                  </div>
+                ) : null}
+                {request.status === "completed" ? (
+                  <p className={styles.placeholder}>Gift completed. Reviews are available.</p>
                 ) : null}
               </article>
             );

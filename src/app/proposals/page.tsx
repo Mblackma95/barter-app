@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { requireUser } from "@/lib/auth/session";
+import { acceptProposalAction, declineProposalAction } from "@/lib/proposals/actions";
 import { listUserProposals } from "@/lib/proposals/queries";
 import styles from "./page.module.css";
 
@@ -19,11 +19,9 @@ export default async function ProposalsPage() {
           <p className={styles.eyebrow}>Proposals</p>
           <h1>Barter and digital proposals</h1>
           <p className={styles.subtle}>
-            Pending received proposals: {unreadPlaceholderCount}. Full unread
-            badges and proposal actions arrive in the next phase.
+            Pending received proposals: {unreadPlaceholderCount}.
           </p>
         </div>
-        <Link href="/browse">Browse</Link>
       </header>
 
       <section className={styles.list}>
@@ -52,10 +50,20 @@ export default async function ProposalsPage() {
               ) : null}
               {proposal.delivery_date ? <p>Delivery date: {proposal.delivery_date}</p> : null}
               {proposal.note ? <p>{proposal.note}</p> : null}
-              <p className={styles.placeholder}>
-                Accept, decline, and counter-proposal actions will be available
-                in Phase 3.
-              </p>
+              {proposal.recipient_id === user.id && proposal.status === "pending" ? (
+                <div className={styles.actions}>
+                  <form action={acceptProposalAction}>
+                    <input type="hidden" name="proposalId" value={proposal.id} />
+                    <button type="submit">Accept proposal</button>
+                  </form>
+                  <form action={declineProposalAction}>
+                    <input type="hidden" name="proposalId" value={proposal.id} />
+                    <button type="submit">Decline</button>
+                  </form>
+                </div>
+              ) : (
+                <p className={styles.placeholder}>Current status: {proposal.status}</p>
+              )}
             </article>
           ))
         ) : (
