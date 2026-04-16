@@ -177,15 +177,6 @@ export async function acceptProposalAction(formData: FormData) {
   const supabase = createAdminSupabaseClient();
   const now = new Date().toISOString();
 
-  const { error: proposalError } = await supabase
-    .from("proposals")
-    .update({ status: "accepted" })
-    .eq("id", proposal.id);
-
-  if (proposalError) {
-    throw new Error(proposalError.message);
-  }
-
   const { data: trade, error: tradeError } = await supabase
     .from("trades")
     .insert({
@@ -214,7 +205,19 @@ export async function acceptProposalAction(formData: FormData) {
   });
 
   if (conversationError) {
+    await supabase.from("trades").delete().eq("id", trade.id);
     throw new Error(conversationError.message);
+  }
+
+  const { error: proposalError } = await supabase
+    .from("proposals")
+    .update({ status: "accepted" })
+    .eq("id", proposal.id);
+
+  if (proposalError) {
+    await supabase.from("conversations").delete().eq("context_type", "trade").eq("context_id", trade.id);
+    await supabase.from("trades").delete().eq("id", trade.id);
+    throw new Error(proposalError.message);
   }
 
   const listingIds = [proposal.target_listing_id, proposal.offered_listing_id].filter(Boolean);
