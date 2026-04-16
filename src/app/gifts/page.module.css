@@ -24,6 +24,21 @@
   padding: 0.65rem 0.8rem;
 }
 
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.card button {
+  cursor: pointer;
+}
+
+.card button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .eyebrow,
 .meta {
   color: var(--accent);
@@ -66,6 +81,15 @@
 .card p {
   color: var(--muted);
   line-height: 1.55;
+}
+
+.completion,
+.placeholder {
+  background: var(--soft);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.6rem;
+  padding: 0.75rem;
 }
 
 @media (max-width: 720px) {

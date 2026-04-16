@@ -99,6 +99,32 @@
   padding: 0.3rem 0.45rem;
 }
 
+.circleForm {
+  margin-top: 0.6rem;
+}
+
+.circleForm button,
+.circleState {
+  background: var(--brand-blue-text);
+  border: 0;
+  border-radius: 8px;
+  color: white;
+  display: inline-flex;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 0.65rem 0.8rem;
+}
+
+.circleForm button {
+  cursor: pointer;
+}
+
+.circleState {
+  background: var(--brand-blue-light);
+  color: var(--brand-blue-text);
+  margin-top: 0.6rem;
+}
+
 @media (max-width: 640px) {
   .header {
     align-items: flex-start;

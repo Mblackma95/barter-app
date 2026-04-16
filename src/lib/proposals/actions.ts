@@ -4,7 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth/session";
 import { maxLocalRadiusKm } from "@/lib/constants/radius";
+import { createNotifications } from "@/lib/notifications/service";
 import { assertProfileReadyForExchange } from "@/lib/profiles/queries";
+import { createAdminSupabaseClient } from "@/lib/supabase/admin";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import {
   barterProposalInputSchema,
@@ -128,6 +130,151 @@ export async function createDigitalProposalAction(formData: FormData) {
   if (error) {
     throw new Error(error.message);
   }
+
+  revalidatePath("/proposals");
+  redirect("/proposals");
+}
+
+async function getProposalForDecision(proposalId: string, userId: string) {
+  const supabase = createAdminSupabaseClient();
+  const { data, error } = await supabase
+    .from("proposals")
+    .select(
+      `
+      id,
+      mode,
+      requester_id,
+      recipient_id,
+      target_listing_id,
+      offered_listing_id,
+      status,
+      target_listing:target_listing_id(title),
+      offered_listing:offered_listing_id(title)
+    `,
+    )
+    .eq("id", proposalId)
+    .single();
+
+  if (error || !data) {
+    throw new Error("Proposal not found.");
+  }
+
+  if (data.recipient_id !== userId) {
+    throw new Error("Only the proposal recipient can make this decision.");
+  }
+
+  if (data.status !== "pending") {
+    throw new Error("Only pending proposals can be updated.");
+  }
+
+  return data;
+}
+
+export async function acceptProposalAction(formData: FormData) {
+  const user = await requireUser();
+  const proposalId = String(formData.get("proposalId") ?? "");
+  const proposal = await getProposalForDecision(proposalId, user.id);
+  const supabase = createAdminSupabaseClient();
+  const now = new Date().toISOString();
+
+  const { error: proposalError } = await supabase
+    .from("proposals")
+    .update({ status: "accepted" })
+    .eq("id", proposal.id);
+
+  if (proposalError) {
+    throw new Error(proposalError.message);
+  }
+
+  const { data: trade, error: tradeError } = await supabase
+    .from("trades")
+    .insert({
+      proposal_id: proposal.id,
+      mode: proposal.mode,
+      user_a_id: proposal.requester_id,
+      user_b_id: proposal.recipient_id,
+      target_listing_id: proposal.target_listing_id,
+      offered_listing_id: proposal.offered_listing_id,
+      status: "pending",
+      agreed_at: now,
+    })
+    .select("id")
+    .single();
+
+  if (tradeError || !trade) {
+    throw new Error(tradeError?.message ?? "Trade could not be created.");
+  }
+
+  // Messaging will use this trade-scoped conversation once the chat UI is added.
+  const { error: conversationError } = await supabase.from("conversations").insert({
+    context_type: "trade",
+    context_id: trade.id,
+    user_a_id: proposal.requester_id,
+    user_b_id: proposal.recipient_id,
+  });
+
+  if (conversationError) {
+    throw new Error(conversationError.message);
+  }
+
+  const listingIds = [proposal.target_listing_id, proposal.offered_listing_id].filter(Boolean);
+
+  if (listingIds.length) {
+    const { error: listingError } = await supabase
+      .from("listings")
+      .update({ status: "pending" })
+      .in("id", listingIds);
+
+    if (listingError) {
+      throw new Error(listingError.message);
+    }
+  }
+
+  await createNotifications([
+    {
+      userId: proposal.requester_id,
+      type: "proposal_accepted",
+      title: "Proposal accepted",
+      body: "Your proposal was accepted. The trade is ready for coordination.",
+      linkPath: "/trades",
+    },
+    {
+      userId: proposal.recipient_id,
+      type: "trade_created",
+      title: "Trade created",
+      body: "The accepted proposal is ready for coordination.",
+      linkPath: "/trades",
+    },
+  ]);
+
+  revalidatePath("/proposals");
+  revalidatePath("/trades");
+  redirect("/proposals");
+}
+
+export async function declineProposalAction(formData: FormData) {
+  const user = await requireUser();
+  const proposalId = String(formData.get("proposalId") ?? "");
+  const proposal = await getProposalForDecision(proposalId, user.id);
+  const supabase = createAdminSupabaseClient();
+  const { error } = await supabase
+    .from("proposals")
+    .update({ status: "declined" })
+    .eq("id", proposal.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await createNotifications([
+    {
+      userId: proposal.requester_id,
+      type: "proposal_declined",
+      title: "Proposal declined",
+      body: "Your proposal was declined.",
+      linkPath: "/proposals",
+    },
+  ]);
 
   revalidatePath("/proposals");
   redirect("/proposals");
