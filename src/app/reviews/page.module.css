@@ -13,26 +13,22 @@
   justify-content: space-between;
 }
 
-.header a,
-.actions button {
-  background: var(--foreground);
-  border: 0;
-  border-radius: 8px;
-  color: white;
-  font-weight: 800;
-  min-height: 40px;
-  padding: 0.65rem 0.8rem;
-}
-
-.nav,
-.actions {
+.nav {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
 }
 
-.actions button {
+.nav a,
+.card button {
+  background: var(--foreground);
+  border: 0;
+  border-radius: 8px;
+  color: white;
   cursor: pointer;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 0.65rem 0.8rem;
 }
 
 .eyebrow,
@@ -49,15 +45,46 @@
   line-height: 1;
 }
 
-.subtle {
+.subtle,
+.card p,
+.card label,
+.notice {
   color: var(--muted);
   line-height: 1.55;
-  margin-top: 0.5rem;
 }
 
 .list {
   display: grid;
   gap: 1rem;
+}
+
+.sectionHeader {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: space-between;
+}
+
+.tabs {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+}
+
+.tab {
+  border-radius: 8px;
+  color: var(--muted);
+  font-weight: 800;
+  padding: 0.55rem 0.75rem;
+}
+
+.activeTab {
+  background: var(--brand-blue-light);
+  color: var(--brand-blue-text);
 }
 
 .card,
@@ -74,31 +101,28 @@
   background: var(--soft);
 }
 
-.card p {
-  color: var(--muted);
-  line-height: 1.55;
-}
-
-.cardHeader {
-  align-items: center;
-  display: flex;
-  gap: 0.75rem;
-  justify-content: space-between;
-}
-
-.status {
+.statusNote {
   background: var(--soft);
+  border: 1px solid var(--line);
   border-radius: 8px;
-  color: var(--foreground);
-  font-size: 0.85rem;
+  color: var(--brand-blue-text);
+  font-size: 0.9rem;
   font-weight: 800;
-  padding: 0.35rem 0.55rem;
+  padding: 0.55rem 0.7rem;
 }
 
-.placeholder {
-  background: var(--soft);
+.card label {
+  display: grid;
+  font-weight: 700;
+  gap: 0.35rem;
+}
+
+.card select,
+.card textarea {
+  border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 0.75rem;
+  min-height: 40px;
+  padding: 0.6rem;
 }
 
 @media (max-width: 720px) {
@@ -108,10 +132,5 @@
 
   .header h1 {
     font-size: 2.3rem;
-  }
-
-  .cardHeader {
-    align-items: start;
-    display: grid;
   }
 }

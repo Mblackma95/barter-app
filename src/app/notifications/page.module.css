@@ -13,17 +13,6 @@
   justify-content: space-between;
 }
 
-.header a,
-.actions button {
-  background: var(--foreground);
-  border: 0;
-  border-radius: 8px;
-  color: white;
-  font-weight: 800;
-  min-height: 40px;
-  padding: 0.65rem 0.8rem;
-}
-
 .nav,
 .actions {
   display: flex;
@@ -31,8 +20,17 @@
   gap: 0.6rem;
 }
 
+.nav a,
+.actions a,
 .actions button {
+  background: var(--foreground);
+  border: 0;
+  border-radius: 8px;
+  color: white;
   cursor: pointer;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 0.65rem 0.8rem;
 }
 
 .eyebrow,
@@ -49,10 +47,11 @@
   line-height: 1;
 }
 
-.subtle {
+.subtle,
+.card p,
+.notice {
   color: var(--muted);
   line-height: 1.55;
-  margin-top: 0.5rem;
 }
 
 .list {
@@ -74,31 +73,8 @@
   background: var(--soft);
 }
 
-.card p {
-  color: var(--muted);
-  line-height: 1.55;
-}
-
-.cardHeader {
-  align-items: center;
-  display: flex;
-  gap: 0.75rem;
-  justify-content: space-between;
-}
-
-.status {
-  background: var(--soft);
-  border-radius: 8px;
-  color: var(--foreground);
-  font-size: 0.85rem;
-  font-weight: 800;
-  padding: 0.35rem 0.55rem;
-}
-
-.placeholder {
-  background: var(--soft);
-  border-radius: 8px;
-  padding: 0.75rem;
+.unread {
+  border-color: var(--accent);
 }
 
 @media (max-width: 720px) {
@@ -108,10 +84,5 @@
 
   .header h1 {
     font-size: 2.3rem;
-  }
-
-  .cardHeader {
-    align-items: start;
-    display: grid;
   }
 }

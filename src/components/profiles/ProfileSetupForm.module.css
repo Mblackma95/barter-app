@@ -98,3 +98,15 @@
     grid-template-columns: 1fr;
   }
 }
+.stepCounter {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+.success {
+  background: #e6f7ee;
+  border: 1px solid #b7ebc6;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
