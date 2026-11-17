@@ -44,30 +44,40 @@ export async function confirmTradeCompletionAction(formData: FormData) {
   const user = await requireUser();
   const tradeId = String(formData.get("tradeId") ?? "");
   const trade = await getTradeForUser(tradeId, user.id);
+  const destination = formData.get("returnToTrade") === "1" ? `/trades/${trade.id}` : "/trades";
+  if (trade.status === "completed") redirect(destination);
+  if (trade.status !== "pending") throw new Error("Only pending trades can be completed.");
+  const alreadyConfirmed = trade.user_a_id === user.id ? trade.user_a_confirmed_at : trade.user_b_confirmed_at;
+  if (alreadyConfirmed) redirect(destination);
   const supabase = createAdminSupabaseClient();
   const now = new Date().toISOString();
   const isUserA = trade.user_a_id === user.id;
-  const userAConfirmedAt = isUserA ? now : trade.user_a_confirmed_at;
-  const userBConfirmedAt = isUserA ? trade.user_b_confirmed_at : now;
-  const bothConfirmed = Boolean(userAConfirmedAt && userBConfirmedAt);
+  // Write only this participant's confirmation so concurrent clicks cannot erase each other.
+  const { error: confirmationError } = await supabase.from("trades")
+    .update(isUserA ? { user_a_confirmed_at: now } : { user_b_confirmed_at: now })
+    .eq("id", trade.id).eq("status", "pending");
+  if (confirmationError) throw new Error(confirmationError.message);
+  const { data: confirmations, error: readError } = await supabase.from("trades")
+    .select("user_a_confirmed_at,user_b_confirmed_at").eq("id", trade.id).single();
+  if (readError || !confirmations) throw new Error("Could not verify completion. Please refresh.");
+  const bothConfirmed = Boolean(confirmations.user_a_confirmed_at && confirmations.user_b_confirmed_at);
   const nextStatus = bothConfirmed ? "completed" : "pending";
 
-  const { error } = await supabase
+  const { data: updatedTrade, error } = await supabase
     .from("trades")
     .update({
       status: nextStatus,
-      user_a_confirmed_at: userAConfirmedAt,
-      user_b_confirmed_at: userBConfirmedAt,
       pending_completion_started_at: bothConfirmed
         ? trade.pending_completion_started_at
         : trade.pending_completion_started_at ?? now,
       completed_at: bothConfirmed ? now : null,
     })
-    .eq("id", trade.id);
+    .eq("id", trade.id).eq("status", "pending").select("id").maybeSingle();
 
   if (error) {
     throw new Error(error.message);
   }
+  if (!updatedTrade) redirect(destination);
 
   const otherUserId = trade.user_a_id === user.id ? trade.user_b_id : trade.user_a_id;
 
@@ -115,5 +125,6 @@ export async function confirmTradeCompletionAction(formData: FormData) {
 
   revalidatePath("/trades");
   revalidatePath("/reviews");
-  redirect("/trades");
+  revalidatePath(`/trades/${trade.id}`);
+  redirect(destination);
 }

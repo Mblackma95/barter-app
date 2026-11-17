@@ -1,0 +1,10 @@
+.chat { display: grid; gap: 1rem; min-width: 0; }
+.messages { display: flex; flex-direction: column; gap: .75rem; max-height: 480px; min-height: 200px; overflow-y: auto; padding: .75rem; border: 1px solid var(--line); border-radius: 8px; }
+.bubble { align-self: flex-start; max-width: 85%; background: var(--soft); border-radius: 8px; padding: .75rem; overflow-wrap: anywhere; }
+.mine { align-self: flex-end; background: var(--brand-blue-light); }
+.bubble p { white-space: pre-wrap; margin: .4rem 0; }
+.bubble time, .bubble small { color: var(--muted); font-size: .75rem; }
+.composer { display: grid; gap: .5rem; }
+.composer textarea { width: 100%; resize: vertical; border: 1px solid var(--line); border-radius: 8px; padding: .75rem; font: inherit; }
+.composer button { justify-self: end; background: var(--brand-blue-text); color: white; border: 0; border-radius: 8px; padding: .75rem 1rem; cursor: pointer; min-width: 140px; }
+.composer button:disabled { opacity: .6; cursor: wait; }

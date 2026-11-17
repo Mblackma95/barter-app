@@ -239,20 +239,20 @@ export async function acceptProposalAction(formData: FormData) {
       type: "proposal_accepted",
       title: "Proposal accepted",
       body: "Your proposal was accepted. The trade is ready for coordination.",
-      linkPath: "/trades",
+      linkPath: `/trades/${trade.id}`,
     },
     {
       userId: proposal.recipient_id,
       type: "trade_created",
       title: "Trade created",
       body: "The accepted proposal is ready for coordination.",
-      linkPath: "/trades",
+      linkPath: `/trades/${trade.id}`,
     },
   ]);
 
   revalidatePath("/proposals");
   revalidatePath("/trades");
-  redirect("/proposals");
+  redirect(`/trades/${trade.id}`);
 }
 
 export async function declineProposalAction(formData: FormData) {

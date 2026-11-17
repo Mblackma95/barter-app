@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { requireUser } from "@/lib/auth/session";
 import { addToCircleAction } from "@/lib/circle/actions";
 import { listCircleUserIds } from "@/lib/circle/queries";
@@ -65,9 +66,7 @@ export default async function TradesPage() {
                 </p>
 
                 <p className={styles.placeholder}>{getTradeStatusCopy(trade.status)}</p>
-                <p className={styles.placeholder}>
-                  Messaging will attach to this trade thread after the chat UI is added.
-                </p>
+                <Link href={`/trades/${trade.id}`}>Message Trader / View conversation</Link>
 
                 {trade.status === "pending" ? (
                   <div className={styles.actions}>
@@ -82,7 +81,7 @@ export default async function TradesPage() {
 
                 {trade.status === "completed" ? (
                   <div className={styles.completedActions}>
-                    <p className={styles.placeholder}>Reviews are available for this trade.</p>
+                    <Link href="/reviews">Leave a review</Link>
                     {otherTraderInCircle ? (
                       <p className={styles.circleState}>In Circle ✓</p>
                     ) : (
