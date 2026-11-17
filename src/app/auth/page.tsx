@@ -1,8 +1,10 @@
 import { hasPublicSupabaseEnv } from "@/lib/env";
+import Link from "next/link";
 import { signInAction, signUpAction } from "@/lib/auth/actions";
 import styles from "./page.module.css";
 
-export default function AuthPage() {
+export default async function AuthPage({ searchParams }: { searchParams: Promise<{ error?: string; message?: string }> }) {
+  const params = await searchParams;
   const supabaseReady = hasPublicSupabaseEnv();
 
   return (
@@ -19,6 +21,8 @@ export default function AuthPage() {
       </section>
 
       <section className={styles.grid}>
+        {params.error ? <p role="alert">{params.error}</p> : null}
+        {params.message ? <p role="status">{params.message}</p> : null}
         <form action={signInAction} className={styles.card}>
           <h2>Sign in</h2>
           <label>
@@ -32,6 +36,7 @@ export default function AuthPage() {
           <button type="submit" disabled={!supabaseReady}>
             Sign in
           </button>
+          <Link href="/auth/forgot-password" className={styles.recoveryLink}>Forgot password?</Link>
         </form>
 
         <form action={signUpAction} className={styles.card}>

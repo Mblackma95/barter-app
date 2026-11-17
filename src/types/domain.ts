@@ -15,17 +15,14 @@ export const proposalStatuses = [
   "pending",
   "accepted",
   "declined",
-  "cancelled",
-  "expired",
 ] as const;
 export type ProposalStatus = (typeof proposalStatuses)[number];
 
 export const tradeStatuses = [
-  "agreed",
-  "pending_completion",
+  "pending",
   "completed",
-  "flagged",
-  "cancelled",
+  "canceled",
+  "disputed",
 ] as const;
 export type TradeStatus = (typeof tradeStatuses)[number];
 
@@ -41,13 +38,20 @@ export type GiftRequestStatus = (typeof giftRequestStatuses)[number];
 export const notificationTypes = [
   "proposal_received",
   "proposal_updated",
+  "proposal_accepted",
+  "proposal_declined",
   "message_received",
   "trade_agreed",
+  "trade_created",
+  "trade_status_changed",
   "completion_confirmed",
   "completion_flagged",
+  "pending_completion",
   "gift_requested",
   "gift_approved",
+  "ai_match",
   "review_available",
+  "review_prompt",
   "event_reminder",
   "admin_notice",
 ] as const;

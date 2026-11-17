@@ -1,0 +1,110 @@
+.page {
+  display: grid;
+  gap: 1rem;
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 2rem 1rem 4rem;
+}
+
+.header {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.eyebrow,
+.meta {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.header p,
+.card p,
+.notice {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.card,
+.notice {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.notice {
+  background: var(--soft);
+}
+
+.avatar,
+.avatarFallback {
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  flex: 0 0 auto;
+  object-fit: cover;
+  width: 88px;
+}
+
+.avatarFallback {
+  align-items: center;
+  background: var(--brand-blue-light);
+  color: var(--brand-blue-text);
+  display: grid;
+  font-size: 1.6rem;
+  font-weight: 900;
+  place-items: center;
+}
+
+.cardBody {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.actions a,
+.actions span {
+  border-radius: 8px;
+  font-weight: 800;
+  padding: 0.6rem 0.75rem;
+}
+
+.actions a {
+  background: var(--brand-blue-text);
+  color: white;
+}
+
+.actions span {
+  background: var(--soft);
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .header h1 {
+    font-size: 2.3rem;
+  }
+
+  .card {
+    display: grid;
+  }
+}

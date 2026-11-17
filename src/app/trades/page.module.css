@@ -1,0 +1,140 @@
+.page {
+  display: grid;
+  gap: 1rem;
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 2rem 1rem 4rem;
+}
+
+.header {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.nav,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.actions button {
+  background: var(--foreground);
+  border: 0;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 0.65rem 0.8rem;
+}
+
+.actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.eyebrow,
+.meta {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.subtle,
+.card p,
+.notice {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.list {
+  display: grid;
+  gap: 1rem;
+}
+
+.card,
+.notice {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.7rem;
+  padding: 1rem;
+}
+
+.notice,
+.placeholder {
+  background: var(--soft);
+}
+
+.cardHeader {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.status,
+.placeholder {
+  border-radius: 8px;
+  color: var(--foreground);
+  font-weight: 800;
+  padding: 0.35rem 0.55rem;
+}
+
+.actions form {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.completedActions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.completedActions button,
+.circleState {
+  background: var(--brand-blue-text);
+  border: 0;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 0.65rem 0.8rem;
+}
+
+.circleState {
+  background: var(--brand-blue-light);
+  color: var(--brand-blue-text);
+  cursor: default;
+}
+
+@media (max-width: 720px) {
+  .header {
+    display: grid;
+  }
+
+  .header h1 {
+    font-size: 2.3rem;
+  }
+
+  .cardHeader {
+    align-items: start;
+    display: grid;
+  }
+}

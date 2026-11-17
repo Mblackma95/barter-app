@@ -37,3 +37,9 @@ a {
   color: inherit;
   text-decoration: none;
 }
+:root {
+  --brand-blue: #2563eb;
+  --brand-blue-light: #e6f0ff;
+  --brand-blue-border: #b3ccff;
+  --brand-blue-text: #1a3d8f;
+}

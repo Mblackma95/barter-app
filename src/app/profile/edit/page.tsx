@@ -26,11 +26,6 @@ export default async function ProfileEditPage({
 
   return (
     <main className={styles.page}>
-      <nav className={styles.nav}>
-        <Link href="/browse">Browse</Link>
-        {profile?.username ? <Link href={`/profiles/${profile.username}`}>Public profile</Link> : null}
-      </nav>
-
       <section className={styles.intro}>
         <p className={styles.eyebrow}>{isOnboarding ? "Profile setup" : "Profile"}</p>
         <h1>{isOnboarding ? "Help people know who they are trading with." : "Edit your Barter profile."}</h1>
@@ -38,23 +33,28 @@ export default async function ProfileEditPage({
           Browsing stays open, but proposals and gift requests need a trusted
           community profile first.
         </p>
+        {profile?.username ? (
+          <Link href={`/profiles/${profile.username}`}>View public profile</Link>
+        ) : (
+          <p className={styles.profileHint}>Add a username to unlock your public profile link.</p>
+        )}
       </section>
 
-      {params.saved === "1" ? <p className={styles.notice}>Profile saved.</p> : null}
-
-      {!readiness.isComplete ? (
-        <section className={styles.notice}>
-          <strong>Needed before proposals or gift requests:</strong>
-          <ul className={styles.issues}>
-            {readiness.issues.map((issue) => (
-              <li key={issue}>{issue}</li>
-            ))}
-          </ul>
-        </section>
-      ) : (
-        <p className={styles.notice}>Your profile is ready for proposals and gift requests.</p>
-      )}
-
+{!readiness.isComplete ? (
+  <section className={styles.notice}>
+    <strong>Needed before proposals or gift requests:</strong>
+    <ul className={styles.issues}>
+      {readiness.issues.map((issue) => (
+        <li key={issue}>{issue}</li>
+      ))}
+    </ul>
+  </section>
+) : params.saved === "1" ? (
+  <div className={styles.successCard}>
+    <strong>Profile complete 🎉</strong>
+    <p>You’re now ready to start trading and requesting gifts.</p>
+  </div>
+) : null}
       <ProfileSetupForm profile={profile} categories={categories} />
     </main>
   );

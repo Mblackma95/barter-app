@@ -1,0 +1,87 @@
+.page {
+  display: grid;
+  gap: 1rem;
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 2rem 1rem 4rem;
+}
+
+.header,
+.list {
+  display: grid;
+  gap: 1rem;
+}
+
+.eyebrow,
+.meta {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.subtle,
+.card p,
+.notice {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.card,
+.notice {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.7rem;
+  padding: 1rem;
+}
+
+.notice {
+  background: var(--soft);
+}
+
+.cardHeader {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: space-between;
+}
+
+.status {
+  background: var(--brand-blue-light);
+  border-radius: 8px;
+  color: var(--brand-blue-text);
+  font-weight: 800;
+  padding: 0.45rem 0.65rem;
+}
+
+.reasons {
+  color: var(--muted);
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.card a {
+  background: var(--brand-blue-text);
+  border-radius: 8px;
+  color: white;
+  font-weight: 800;
+  justify-self: start;
+  padding: 0.65rem 0.8rem;
+}
+
+@media (max-width: 720px) {
+  .header h1 {
+    font-size: 2.3rem;
+  }
+}

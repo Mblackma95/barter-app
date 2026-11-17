@@ -56,6 +56,13 @@
   line-height: 1.55;
 }
 
+.profileHint {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem;
+}
+
 .issues {
   margin: 0;
   padding-left: 1.1rem;
@@ -65,4 +72,20 @@
   .intro h1 {
     font-size: 2rem;
   }
+}
+.successCard {
+  background: #e6f0ff;
+  border: 1px solid #b3ccff;
+  color: #1a3d8f;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+.successCard {
+  background: var(--brand-blue-light);
+  border: 1px solid var(--brand-blue-border);
+  color: var(--brand-blue-text);
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 16px;
 }

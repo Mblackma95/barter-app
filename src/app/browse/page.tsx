@@ -2,9 +2,7 @@
 import Link from "next/link";
 import { hasPublicSupabaseEnv } from "@/lib/env";
 import { getOptionalUser } from "@/lib/auth/session";
-import { signOutAction } from "@/lib/auth/actions";
 import { maxLocalRadiusKm, minLocalRadiusKm } from "@/lib/constants/radius";
-import { getInboxCounts } from "@/lib/inbox/counts";
 import { listCategories, listListings } from "@/lib/listings/queries";
 import type { ExchangeMode } from "@/types/domain";
 import styles from "./page.module.css";
@@ -27,9 +25,6 @@ export default async function BrowsePage({
   const supabaseReady = hasPublicSupabaseEnv();
   const user = await getOptionalUser();
   const categories = await listCategories();
-  const inboxCounts = user
-    ? await getInboxCounts(user.id)
-    : { pendingReceivedProposals: 0, pendingReceivedGiftRequests: 0 };
   const mode = ["barter", "digital", "gift"].includes(params.mode ?? "")
     ? (params.mode as ExchangeMode)
     : undefined;
@@ -49,16 +44,7 @@ export default async function BrowsePage({
         </div>
         <nav className={styles.nav}>
           <Link href="/listings/new">Create listing</Link>
-          {user ? <Link href="/profile/edit">Profile</Link> : null}
-          <Link href="/proposals">Proposals ({inboxCounts.pendingReceivedProposals})</Link>
-          <Link href="/gifts">Gifts ({inboxCounts.pendingReceivedGiftRequests})</Link>
-          {user ? (
-            <form action={signOutAction}>
-              <button type="submit">Sign out</button>
-            </form>
-          ) : (
-            <Link href="/auth">Sign in</Link>
-          )}
+          {!user ? <Link href="/auth">Sign in</Link> : null}
         </nav>
       </header>
 

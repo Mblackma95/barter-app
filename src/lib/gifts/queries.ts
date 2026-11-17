@@ -6,8 +6,12 @@ export type GiftRequestRow = {
   message: string | null;
   status: string;
   created_at: string;
+  listing_id: string;
   requester_id: string;
   giver_id: string;
+  requester_confirmed_at: string | null;
+  giver_confirmed_at: string | null;
+  completed_at: string | null;
   listings: {
     title: string;
     slug: string;
@@ -36,8 +40,12 @@ export async function listUserGiftRequests(userId: string) {
       message,
       status,
       created_at,
+      listing_id,
       requester_id,
       giver_id,
+      requester_confirmed_at,
+      giver_confirmed_at,
+      completed_at,
       listings:listing_id(title, slug),
       requester:requester_id(display_name, username),
       giver:giver_id(display_name, username)

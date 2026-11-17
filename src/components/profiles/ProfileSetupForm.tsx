@@ -68,6 +68,10 @@ export function ProfileSetupForm({
         <input key={id} type="hidden" name="preferredCategoryIds" value={id} />
       ))}
 
+      <p className={styles.stepCounter}>
+  Step {step + 1} of {steps.length}
+</p>
+
       <ol className={styles.steps} aria-label="Profile setup steps">
         {steps.map((label, index) => (
           <li key={label} className={index === step ? styles.activeStep : ""}>
@@ -178,8 +182,12 @@ export function ProfileSetupForm({
               onChange={(e) => setAllowedRadiusKm(e.target.value)}
             />
           </label>
-          <p>{allowedRadiusKm} km</p>
-
+<p>
+  You’ll trade within <strong>{allowedRadiusKm} km</strong>
+</p>
+<p style={{ fontSize: "0.85rem", opacity: 0.7 }}>
+  You can change this later in your profile.
+</p>
           <label>
             Optional preferred categories
             <select

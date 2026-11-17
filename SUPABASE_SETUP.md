@@ -70,7 +70,12 @@ Run these files in this exact order:
 4. `supabase/migrations/0004_listing_media_storage.sql`
 5. `supabase/migrations/0005_profile_foundation.sql`
 6. `supabase/migrations/0006_profile_needs_preferences.sql`
-7. `supabase/seed.sql`
+7. `supabase/migrations/0007_phase3_trades_reviews_notifications.sql`
+8. `supabase/migrations/0008_blind_reviews_ai_matches.sql`
+9. `supabase/migrations/0009_simplify_trade_proposal_flow.sql`
+10. `supabase/migrations/0010_apply_simplified_trade_proposal_flow.sql`
+11. `supabase/migrations/0011_user_circles.sql`
+12. `supabase/seed.sql`
 
 The first file creates:
 
@@ -106,6 +111,11 @@ Image public URLs are derived in the app from `listing_photos.storage_path`.
 
 The fifth file adds profile foundation fields and the `profile-media` Storage bucket.
 The sixth file splits profile wants/needs and adds preferred category selections.
+The seventh file adds Phase 3 trade statuses, notification types, and needed RLS policies.
+The eighth file adds blind-review reveal fields, review reminder tracking, and AI match opportunity storage.
+The ninth file adds the simplified `pending` trade status.
+The tenth file applies the simplified proposal and trade status rules for the MVP flow.
+The eleventh file adds the lightweight Circle trust network table and policies.
 The seed file inserts the fixed MVP categories.
 
 ## 5. Confirm Tables Exist
@@ -123,6 +133,9 @@ After running the SQL, go to **Table Editor** and confirm these tables exist:
 - `messages`
 - `notifications`
 - `reviews`
+- `review_reminders`
+- `ai_match_opportunities`
+- `user_circles`
 - `reports`
 - `events`
 - `event_rsvps`

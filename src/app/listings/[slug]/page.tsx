@@ -39,13 +39,6 @@ export default async function ListingDetailPage({
 
   return (
     <main className={styles.page}>
-      <nav className={styles.nav}>
-        <Link href="/browse">Browse</Link>
-        <Link href="/listings/new">Create listing</Link>
-        <Link href="/proposals">Proposals</Link>
-        <Link href="/gifts">Gifts</Link>
-      </nav>
-
       <article className={styles.card}>
         {photos.length ? (
           <div className={styles.gallery}>
@@ -82,7 +75,7 @@ export default async function ListingDetailPage({
             <div>
               <p className={styles.eyebrow}>Trader snapshot</p>
               <h2>
-                <Link href={`/profiles/${trader.username}`}>{trader.display_name}</Link>
+                {trader.username ? <Link href={`/profiles/${trader.username}`}>{trader.display_name}</Link> : trader.display_name}
               </h2>
               <p className={styles.meta}>
                 {trader.city || "City not added"} · Gifts given: {trader.gifts_given_count}
