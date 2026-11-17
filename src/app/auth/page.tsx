@@ -1,5 +1,6 @@
 import { hasPublicSupabaseEnv } from "@/lib/env";
-import { signInAction, signUpAction, requestPasswordResetAction } from "@/lib/auth/actions";
+import Link from "next/link";
+import { signInAction, signUpAction } from "@/lib/auth/actions";
 import styles from "./page.module.css";
 
 export default async function AuthPage({ searchParams }: { searchParams: Promise<{ error?: string; message?: string }> }) {
@@ -35,12 +36,7 @@ export default async function AuthPage({ searchParams }: { searchParams: Promise
           <button type="submit" disabled={!supabaseReady}>
             Sign in
           </button>
-        </form>
-
-        <form action={requestPasswordResetAction} className={styles.card}>
-          <h2>Forgot password?</h2>
-          <label>Email<input name="email" type="email" autoComplete="email" required /></label>
-          <button type="submit" disabled={!supabaseReady}>Send reset link</button>
+          <Link href="/auth/forgot-password" className={styles.recoveryLink}>Forgot password?</Link>
         </form>
 
         <form action={signUpAction} className={styles.card}>

@@ -75,6 +75,20 @@
   opacity: 0.45;
 }
 
+.recoveryLink {
+  color: var(--brand-blue-text);
+  font-size: 0.875rem;
+  justify-self: start;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.recoveryForm {
+  width: 100%;
+  max-width: 440px;
+  justify-self: center;
+}
+
 @media (max-width: 760px) {
   .grid {
     grid-template-columns: 1fr;
